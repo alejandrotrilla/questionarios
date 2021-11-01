@@ -30,7 +30,7 @@ metadata:
   name: questionarios-api
   namespace: questionarios
 spec:
-  replicas: 3
+  replicas: 10
   selector:
     matchLabels:
       app.kubernetes.io/name: questionarios-api
