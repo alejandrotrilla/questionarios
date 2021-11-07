@@ -1,0 +1,32 @@
+kubectl create namespace questionarios
+kubectl apply -f kubernetes/configuration/db-secret.yml -n=questionarios
+kubectl apply -f kubernetes/configuration/db-configmap.yml -n=questionarios
+#kubectl apply -f target/kubernetes/kubernetes.yml
+
+
+docker login 
+
+mvn clean package -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
+
+
+kubectl delete -f target/kubernetes/kubernetes.yml
+
+
+
+
+
+-----------------------------
+
+
+kubectl create namespace argocd
+
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+http://localhost:8080
+
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+----------------------------------
+kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.13/kubegres.yaml

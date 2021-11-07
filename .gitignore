@@ -9,6 +9,7 @@ release.properties
 .project
 .classpath
 .settings/
+.jpb/
 bin/
 
 # IntelliJ

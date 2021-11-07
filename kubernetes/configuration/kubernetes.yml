@@ -3,8 +3,8 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 7b3e9061d958543b83520558a327a86910908462
-    app.quarkus.io/build-timestamp: 2021-11-01 - 19:25:57 +0000
+    app.quarkus.io/commit-id: f8d406ea537bc8cb2f8407cf95365ec1f4108c80
+    app.quarkus.io/build-timestamp: 2021-11-07 - 22:04:31 +0000
   labels:
     app.kubernetes.io/name: questionarios-api
     app.kubernetes.io/version: 1.0.2-SNAPSHOT
@@ -15,8 +15,8 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 7b3e9061d958543b83520558a327a86910908462
-    app.quarkus.io/build-timestamp: 2021-11-01 - 19:25:57 +0000
+    app.quarkus.io/commit-id: f8d406ea537bc8cb2f8407cf95365ec1f4108c80
+    app.quarkus.io/build-timestamp: 2021-11-07 - 22:04:31 +0000
   labels:
     app.kubernetes.io/name: questionarios-api
     app.kubernetes.io/version: 1.0.2-SNAPSHOT
@@ -50,8 +50,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 7b3e9061d958543b83520558a327a86910908462
-    app.quarkus.io/build-timestamp: 2021-11-01 - 19:25:57 +0000
+    app.quarkus.io/commit-id: f8d406ea537bc8cb2f8407cf95365ec1f4108c80
+    app.quarkus.io/build-timestamp: 2021-11-07 - 22:04:31 +0000
   labels:
     app.kubernetes.io/name: questionarios-api
     app.kubernetes.io/version: 1.0.2-SNAPSHOT
@@ -66,8 +66,8 @@ spec:
   template:
     metadata:
       annotations:
-        app.quarkus.io/commit-id: 7b3e9061d958543b83520558a327a86910908462
-        app.quarkus.io/build-timestamp: 2021-11-01 - 19:25:57 +0000
+        app.quarkus.io/commit-id: f8d406ea537bc8cb2f8407cf95365ec1f4108c80
+        app.quarkus.io/build-timestamp: 2021-11-07 - 22:04:31 +0000
       labels:
         app.kubernetes.io/name: questionarios-api
         app.kubernetes.io/version: 1.0.2-SNAPSHOT
@@ -79,21 +79,21 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: db-password
-                  name: db-secret
-            - name: DB_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  key: db-username
-                  name: db-configmap
             - name: DB_URL
               valueFrom:
                 configMapKeyRef:
                   key: db-url
                   name: db-configmap
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: db-username
+                  name: db-configmap
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: db-password
+                  name: db-secret
           image: alejandrotrilla/questionarios-api:1.0.2-SNAPSHOT
           imagePullPolicy: Always
           name: questionarios-api
@@ -114,8 +114,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 7b3e9061d958543b83520558a327a86910908462
-    app.quarkus.io/build-timestamp: 2021-11-01 - 19:25:57 +0000
+    app.quarkus.io/commit-id: f8d406ea537bc8cb2f8407cf95365ec1f4108c80
+    app.quarkus.io/build-timestamp: 2021-11-07 - 22:04:31 +0000
   labels:
     app.kubernetes.io/name: questionarios-api
     app.kubernetes.io/version: 1.0.2-SNAPSHOT
