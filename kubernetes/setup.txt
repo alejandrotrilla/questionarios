@@ -6,7 +6,7 @@ kubectl apply -f kubernetes/configuration/db-configmap.yml -n=questionarios
 
 docker login 
 
-mvn clean package -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
+mvn clean package -X -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
 
 kubectl port-forward svc/questionarios-api -n=questionarios 9090:8080
 
@@ -34,4 +34,4 @@ kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.13/
 
 kubectl apply -f kubernetes/configuration/kubegress.yml
 
-kubectl port-forward svc/pg-admin 8080:80
+kubectl port-forward svc/pg-admin 8082:80
