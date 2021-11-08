@@ -8,7 +8,7 @@ docker login
 
 mvn clean package -X -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
 
-kubectl port-forward svc/questionarios-api -n=questionarios 9090:8080
+kubectl port-forward svc/questionarios-api -n=questionarios 9090:80
 
 kubectl delete -f target/kubernetes/kubernetes.yml
 
@@ -34,4 +34,4 @@ kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.13/
 
 kubectl apply -f kubernetes/configuration/kubegress.yml
 
-kubectl port-forward svc/pg-admin 8082:80
+kubectl port-forward svc/pg-admin -n questionarios 8082:80
