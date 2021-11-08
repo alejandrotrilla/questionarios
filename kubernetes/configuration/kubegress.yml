@@ -34,3 +34,46 @@ spec:
         secretKeyRef:
           name: mypostgres-secret
           key: replicationUserPassword
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-admin
+  labels:
+    app.kubernetes.io/name: pg-admin
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pg-admin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pg-admin
+    spec:
+      containers:
+        - name: pg-admin
+          image: dpage/pgadmin4
+          ports:
+            - containerPort: 80
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: user@domain.com
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: SuperSecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: pg-admin
+  name: pg-admin
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app.kubernetes.io/name: pg-admin
+  type: ClusterIP
