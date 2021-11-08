@@ -94,7 +94,7 @@ spec:
                 secretKeyRef:
                   key: db-password
                   name: db-secret
-          image: alejandrotrilla/questionarios-api:1.0.3-SNAPSHOT
+          image: alejandrotrilla/questionarios-api:1.0.4-SNAPSHOT
           imagePullPolicy: Always
           name: questionarios-api
           ports:

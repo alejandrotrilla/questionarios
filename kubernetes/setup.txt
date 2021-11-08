@@ -8,6 +8,7 @@ docker login
 
 mvn clean package -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
 
+kubectl port-forward svc/questionarios-api -n=questionarios 9090:8080
 
 kubectl delete -f target/kubernetes/kubernetes.yml
 
