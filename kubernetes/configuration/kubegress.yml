@@ -42,6 +42,8 @@ metadata:
   namespace: questionarios
   labels:
     app.kubernetes.io/name: pg-admin
+  annotations:
+    pv.beta.kubernetes.io/gid: "5050"
 spec:
   selector:
     matchLabels:
@@ -52,6 +54,10 @@ spec:
       labels:
         app.kubernetes.io/name: pg-admin
     spec:
+      volumes:
+        - name: pg-admin-pv-storage
+          persistentVolumeClaim:
+            claimName: pg-admin-pv-claim
       containers:
         - name: pg-admin
           image: dpage/pgadmin4
@@ -62,6 +68,9 @@ spec:
               value: user@domain.com
             - name: PGADMIN_DEFAULT_PASSWORD
               value: SuperSecret
+          volumeMounts:
+            - mountPath: "/var/lib/pgadmin"
+              name: pg-admin-pv-storage
 ---
 apiVersion: v1
 kind: Service
