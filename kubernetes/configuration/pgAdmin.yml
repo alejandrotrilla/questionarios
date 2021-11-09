@@ -1,39 +1,31 @@
 apiVersion: v1
-kind: Secret
+kind: PersistentVolume
 metadata:
-  name: mypostgres-secret
+  name: pg-admin-pv-volume
   namespace: questionarios
-type: Opaque
-stringData:
-  superUserPassword: postgresSuperUserPsw
-  replicationUserPassword: postgresReplicaPsw
----
-apiVersion: kubegres.reactive-tech.io/v1
-kind: Kubegres
-metadata:
-  name: mypostgres
-  namespace: questionarios
-
+  labels:
+    type: local
 spec:
-
-  replicas: 3
-  image: postgres:14
-
-  database:
-    size: 200Mi
-
-  env:
-    - name: POSTGRES_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: mypostgres-secret
-          key: superUserPassword
-
-    - name: POSTGRES_REPLICATION_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: mypostgres-secret
-          key: replicationUserPassword
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/kubernetes-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-admin-pv-claim
+  namespace: questionarios
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -42,8 +34,6 @@ metadata:
   namespace: questionarios
   labels:
     app.kubernetes.io/name: pg-admin
-  annotations:
-    pv.beta.kubernetes.io/gid: "5050"
 spec:
   selector:
     matchLabels:

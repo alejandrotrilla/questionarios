@@ -17,7 +17,7 @@ kubectl delete -f target/kubernetes/kubernetes.yml
 
 
 -----------------------------
-
+# ArgoCD
 
 kubectl create namespace argocd
 
@@ -30,12 +30,22 @@ http://localhost:8080
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
 ----------------------------------
+# PostgreSQL & pgAdmin
+
 kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.13/kubegres.yaml
 
-sudo mkdir /mnt/kubernetes-data
+#
+# create a directory in fs of minikube machine
+#
+minikube ssh
+    $ sudo mkdir /mnt/kubernetes-data
+    $ sudo chown 5050 /mnt/kubernetes-data
 
-kubectl apply -f kubernetes/configuration/kubegress.yml
+kubectl apply -f kubernetes/configuration/kubegres.yml
 
 kubectl port-forward svc/pg-admin -n questionarios 8082:80
 
+brave-browser http://localhost:8082
+    > user@domain.com
+    > SuperSecret
 
