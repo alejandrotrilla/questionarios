@@ -45,6 +45,8 @@ kubectl apply -f kubernetes/configuration/kubegres.yml
 
 kubectl apply -f kubernetes/configuration/paAdmin.yml
 
+kubectl port-forward svc/postgres -n questionarios 5432:5432
+
 kubectl port-forward svc/pg-admin -n questionarios 8082:80
 
 brave-browser http://localhost:8082
