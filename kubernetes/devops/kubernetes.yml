@@ -85,7 +85,7 @@ metadata:
   name: questionarios-api
   namespace: questionarios
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/version: 1.0.4-SNAPSHOT
