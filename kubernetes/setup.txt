@@ -1,12 +1,12 @@
 kubectl create namespace questionarios
-kubectl apply -f kubernetes/configuration/db-secret.yml -n=questionarios
-kubectl apply -f kubernetes/configuration/db-configmap.yml -n=questionarios
+kubectl apply -f kubernetes/configuration/db-secret.yml
+kubectl apply -f kubernetes/configuration/db-configmap.yml
 #kubectl apply -f target/kubernetes/kubernetes.yml
 
 
 docker login 
 
-mvn clean package -X -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
+mvn clean package -Pnative -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true
 
 kubectl port-forward svc/questionarios-api -n=questionarios 9090:80
 
@@ -23,11 +23,11 @@ kubectl create namespace argocd
 
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
 
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
 kubectl port-forward svc/argocd-server -n argocd 8081:443
 
-http://localhost:8080
-
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+brave-browser http://localhost:8081
 
 ----------------------------------
 # PostgreSQL & pgAdmin
@@ -42,6 +42,8 @@ minikube ssh
     $ sudo chown 5050 /mnt/kubernetes-data
 
 kubectl apply -f kubernetes/configuration/kubegres.yml
+
+kubectl apply -f kubernetes/configuration/paAdmin.yml
 
 kubectl port-forward svc/pg-admin -n questionarios 8082:80
 

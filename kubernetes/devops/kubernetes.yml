@@ -3,11 +3,11 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 261bbbccc4b406ec6f0a2675581daa89f088ba5e
-    app.quarkus.io/build-timestamp: 2021-11-08 - 00:35:22 +0000
+    app.quarkus.io/commit-id: 93bbd64beba2d1cce08a61daabfb2f8410ed5db8
+    app.quarkus.io/build-timestamp: 2021-11-10 - 16:34:55 +0000
   labels:
+    app.kubernetes.io/version: 1.0.4-SNAPSHOT
     app.kubernetes.io/name: questionarios-api
-    app.kubernetes.io/version: 1.0.3-SNAPSHOT
   name: questionarios-api
   namespace: questionarios
 ---
@@ -15,11 +15,11 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 261bbbccc4b406ec6f0a2675581daa89f088ba5e
-    app.quarkus.io/build-timestamp: 2021-11-08 - 00:35:22 +0000
+    app.quarkus.io/commit-id: 93bbd64beba2d1cce08a61daabfb2f8410ed5db8
+    app.quarkus.io/build-timestamp: 2021-11-10 - 16:34:55 +0000
   labels:
     app.kubernetes.io/name: questionarios-api
-    app.kubernetes.io/version: 1.0.3-SNAPSHOT
+    app.kubernetes.io/version: 1.0.4-SNAPSHOT
   name: questionarios-api
   namespace: questionarios
 spec:
@@ -29,8 +29,21 @@ spec:
       targetPort: 8080
   selector:
     app.kubernetes.io/name: questionarios-api
-    app.kubernetes.io/version: 1.0.3-SNAPSHOT
+    app.kubernetes.io/version: 1.0.4-SNAPSHOT
   type: ClusterIP
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: view-secrets
+  namespace: questionarios
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -46,31 +59,45 @@ subjects:
     name: questionarios-api
     namespace: questionarios
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: questionarios-api-view-secrets
+  namespace: questionarios
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: view-secrets
+subjects:
+  - kind: ServiceAccount
+    name: questionarios-api
+    namespace: questionarios
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 261bbbccc4b406ec6f0a2675581daa89f088ba5e
-    app.quarkus.io/build-timestamp: 2021-11-08 - 00:35:22 +0000
+    app.quarkus.io/commit-id: 93bbd64beba2d1cce08a61daabfb2f8410ed5db8
+    app.quarkus.io/build-timestamp: 2021-11-10 - 16:34:55 +0000
   labels:
+    app.kubernetes.io/version: 1.0.4-SNAPSHOT
     app.kubernetes.io/name: questionarios-api
-    app.kubernetes.io/version: 1.0.3-SNAPSHOT
   name: questionarios-api
   namespace: questionarios
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
+      app.kubernetes.io/version: 1.0.4-SNAPSHOT
       app.kubernetes.io/name: questionarios-api
-      app.kubernetes.io/version: 1.0.3-SNAPSHOT
   template:
     metadata:
       annotations:
-        app.quarkus.io/commit-id: 261bbbccc4b406ec6f0a2675581daa89f088ba5e
-        app.quarkus.io/build-timestamp: 2021-11-08 - 00:35:22 +0000
+        app.quarkus.io/commit-id: 93bbd64beba2d1cce08a61daabfb2f8410ed5db8
+        app.quarkus.io/build-timestamp: 2021-11-10 - 16:34:55 +0000
       labels:
+        app.kubernetes.io/version: 1.0.4-SNAPSHOT
         app.kubernetes.io/name: questionarios-api
-        app.kubernetes.io/version: 1.0.3-SNAPSHOT
       namespace: questionarios
     spec:
       containers:
@@ -79,28 +106,33 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: DB_URL
-              valueFrom:
-                configMapKeyRef:
-                  key: db-url
-                  name: db-configmap
-            - name: DB_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  key: db-username
-                  name: db-configmap
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: db-password
-                  name: db-secret
           image: alejandrotrilla/questionarios-api:1.0.4-SNAPSHOT
           imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
           name: questionarios-api
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 45
+            successThreshold: 1
+            timeoutSeconds: 10
           resources:
             limits:
               cpu: 1000m
@@ -114,11 +146,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 261bbbccc4b406ec6f0a2675581daa89f088ba5e
-    app.quarkus.io/build-timestamp: 2021-11-08 - 00:35:22 +0000
+    app.quarkus.io/commit-id: 93bbd64beba2d1cce08a61daabfb2f8410ed5db8
+    app.quarkus.io/build-timestamp: 2021-11-10 - 16:34:55 +0000
   labels:
     app.kubernetes.io/name: questionarios-api
-    app.kubernetes.io/version: 1.0.3-SNAPSHOT
+    app.kubernetes.io/version: 1.0.4-SNAPSHOT
   name: questionarios-api
   namespace: questionarios
 spec:

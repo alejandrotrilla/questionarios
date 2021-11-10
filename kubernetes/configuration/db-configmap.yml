@@ -4,5 +4,4 @@ metadata:
   name: db-configmap
   namespace: questionarios
 data:
-  db-username: "admin"
-  db-url: "db-server"
+  DB_URL: postgres://postgres:5432/questionarios

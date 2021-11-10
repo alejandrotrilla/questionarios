@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mypostgres-secret
+  name: postgres-secret
   namespace: questionarios
 type: Opaque
 stringData:
@@ -11,26 +11,21 @@ stringData:
 apiVersion: kubegres.reactive-tech.io/v1
 kind: Kubegres
 metadata:
-  name: mypostgres
+  name: postgres
   namespace: questionarios
-
 spec:
-
-  replicas: 3
+  replicas: 1
   image: postgres:14
-
   database:
     size: 200Mi
-
   env:
     - name: POSTGRES_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: mypostgres-secret
+          name: postgres-secret
           key: superUserPassword
-
     - name: POSTGRES_REPLICATION_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: mypostgres-secret
+          name: postgres-secret
           key: replicationUserPassword
