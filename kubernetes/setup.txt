@@ -53,3 +53,10 @@ brave-browser http://localhost:8082
     > user@domain.com
     > SuperSecret
 
+------------------------------------
+
+
+mvn clean verify sonar:sonar \
+  -Dsonar.projectKey=questionarios \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=c52d231e50c74043d32712c2d05dc7ad46ca1168
