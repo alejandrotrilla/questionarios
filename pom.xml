@@ -17,9 +17,6 @@
     <quarkus.platform.version>2.4.0.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-    <sonar.projectKey>questionarios</sonar.projectKey>
-    <!--sonar.host.url>http://localhost:9000</sonar.host.url-->
-    <!--sonar.login>c52d231e50c74043d32712c2d05dc7ad46ca1168</sonar.login-->
   </properties>
   <dependencyManagement>
     <dependencies>
